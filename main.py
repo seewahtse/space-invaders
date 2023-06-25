@@ -83,6 +83,13 @@ scorestring = "Score: %s" % score
 score_pen.write(scorestring, False, align="left", font=("Arial", 14, "normal"))
 score_pen.hideturtle()
 
+# Game over pen
+game_over_pen = turtle.Turtle()
+game_over_pen.speed(0)
+game_over_pen.color("white")
+game_over_pen.penup()
+game_over_pen.setposition(0, 0)
+game_over_pen.hideturtle()
 
 # Move the player left and right
 def move_left():
@@ -136,11 +143,7 @@ def isCollision(t1, t2):
     else:
         return False
 
-
-
-    # Create keyboard bindings
-
-
+# Create keyboard bindings
 turtle.listen()
 turtle.onkey(move_left, "Left")
 turtle.onkey(move_right, "Right")
@@ -190,8 +193,37 @@ while True:
         if isCollision(player, enemy):
             player.hideturtle()
             enemy.hideturtle()
-            print("Game Over")
-            break
+            game_over_pen.write("Game Over", align="center", font=("Arial", 30, "normal"))
+            play_again = wn.textinput("Play Again?", "Do you want to play again? (y/n)")
+            if play_again.lower() == "y":
+                # Reset the game
+                game_over_pen.clear()
+                player.setposition(0, -250)
+                player.showturtle()
+                for enemy in enemies:
+                    enemy.hideturtle()
+                enemies.clear()
+                for i in range(number_of_enemies):
+                    # Create the enemy
+                    enemies.append(turtle.Turtle())
+
+                for enemy in enemies:
+                    enemy.color("red")
+                    enemy.shape("circle")
+                    enemy.penup()
+                    enemy.speed(0)
+                    x = random.randint(-200, 200)
+                    y = random.randint(100, 250)
+                    enemy.setposition(x, y)
+
+                score = 0
+                scorestring = "Score: %s" % score
+                score_pen.clear()
+                score_pen.write(scorestring, False, align="left", font=("Arial", 14, "normal"))
+            else:
+                wn.bye()
+                break
+
     # Move the bullet
     y = bullet.ycor()
     y += bulletspeed
@@ -204,9 +236,35 @@ while True:
 
     # Check for a victory
     if score == number_of_enemies:
-        print("You win!")
-        break
+        game_over_pen.write("You win!", align="center", font=("Arial", 30, "normal"))
+        play_again = wn.textinput("Play Again?", "Do you want to play again? (y/n)")
+        if play_again.lower() == "y":
+            # Reset the game
+            game_over_pen.clear()
+            player.setposition(0, -250)
+            player.showturtle()
+            for enemy in enemies:
+                enemy.hideturtle()
+            enemies.clear()
+            for i in range(number_of_enemies):
+                # Create the enemy
+                enemies.append(turtle.Turtle())
+
+            for enemy in enemies:
+                enemy.color("red")
+                enemy.shape("circle")
+                enemy.penup()
+                enemy.speed(0)
+                x = random.randint(-200, 200)
+                y = random.randint(100, 250)
+                enemy.setposition(x, y)
+
+            score = 0
+            scorestring = "Score: %s" % score
+            score_pen.clear()
+            score_pen.write(scorestring, False, align="left", font=("Arial", 14, "normal"))
+        else:
+            wn.bye()
+            break
 
 wn.mainloop()
-
-
